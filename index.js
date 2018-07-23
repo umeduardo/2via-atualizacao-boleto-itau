@@ -32,21 +32,6 @@ app.get('/atualiza', async function(req, res) {
 		  'Content-Disposition': 'inline; filename=boleto.pdf'
 		});
 		resp.pipe(res);
-
-		/*
-		let file = fs.createWriteStream(req.query.b+".pdf");
-		resp.pipe(file);
-
-		file.on('finish', () => {
-			fs.readFile(req.query.b+".pdf" , function (err,data){
-	            res.contentType("application/pdf");
-	            res.status(200).send(data);
-	            res.end();
-
-	            fs.unlink(req.query.b+".pdf");
-	        });
-		})
-		*/
   } else {
   	res.send("Not found");
   }
@@ -59,7 +44,7 @@ app.get('/2via', async function(req, res) {
 		
 		if( result.success == false ){
 			res.contentType("application/json");
-			res.status(400).send(result.error);
+			res.status(400).send(result);
             res.end();
             return;	
 		}
@@ -89,7 +74,6 @@ function pup1( type, linhaDigitavel ){
 	return new Promise(function(resolve, reject){
 		let a = (async () => {
 			try{
-				console.log(linhaDigitavel);
 
 				const page = await browser.newPage();
 				await page.setRequestInterception(true);
@@ -118,10 +102,7 @@ function pup1( type, linhaDigitavel ){
 
 				await page.click('#btnProximo a');
 
-				console.log("3");
 				await page.waitForNavigation()
-
-				console.log("4");
 
 				const result = await page.evaluate(async () => {
 					const form = document.querySelector("form[name='frmPDF']");
