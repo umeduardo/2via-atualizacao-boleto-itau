@@ -3,15 +3,22 @@ const http = require('http')
 const port = 3000
 const ip = 'localhost'
 
-var browser;
 var express = require('express');
 var request = require('request');
 var fs = require('fs');
 var app = express();
 
+let browserWSEndpoint = null;
+
 app.get('/atualiza', async function(req, res) {
+
+  if (!browserWSEndpoint) {
+  	const browser = await puppeteer.launch({headless: false});
+  	browserWSEndpoint = await browser.wsEndpoint();
+  }
+
   if( req.query.b ){
-		const result = await pup1('atualizar',req.query.b);
+		const result = await pup1('atualizar',req.query.b, browserWSEndpoint);
 		
 		if( result.success == false ){
 			res.contentType("application/json");
@@ -37,9 +44,14 @@ app.get('/atualiza', async function(req, res) {
 });
 
 app.get('/2via', async function(req, res) {
+
+  if (!browserWSEndpoint) {
+  	const browser = await puppeteer.launch({headless: false});
+  	browserWSEndpoint = await browser.wsEndpoint();
+  }
   
   if( req.query.b ){
-		const result = await pup1('2via',req.query.b);
+		const result = await pup1('2via',req.query.b, browserWSEndpoint);
 		
 		if( result.success == false ){
 			res.contentType("application/json");
@@ -66,14 +78,13 @@ app.get('/2via', async function(req, res) {
 });
 
 app.listen(3000, async function(){
-	 browser = await puppeteer.launch({headless:true});
 });
 
-function pup1( type, linhaDigitavel ){
+function pup1( type, linhaDigitavel, browserWSEndpoint){
 	return new Promise(function(resolve, reject){
 		let a = (async () => {
 			try{
-
+				const browser = await puppeteer.connect({browserWSEndpoint});	
 				const page = await browser.newPage();
 				await page.setRequestInterception(true);
 				let block_ressources = ['image', 'stylesheet', 'media', 'font', 'texttrack', 'object', 'beacon', 'csp_report', 'imageset'];
@@ -131,10 +142,11 @@ function pup1( type, linhaDigitavel ){
 					}
 
 				});
-
-				return result;
+				await page.close();
+				return result;				
 			} catch(err) {
-				return {success: false}
+				await page.close();
+				return {success: false}				
 			}
 		})();
 
