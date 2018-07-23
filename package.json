@@ -1,0 +1,34 @@
+{
+  "name": "2via-atualizacao-boleto-itau",
+  "version": "1.0.0",
+  "description": "Segunda Via e Atualização de boletos registrados para o ITAÚ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/umeduardo/2via-atualizacao-boleto-itau.git"
+  },
+  "keywords": [
+    "boleto",
+    "itau",
+    "segunda-via",
+    "atualizacao",
+    "de",
+    "boleto",
+    "boleto",
+    "registrado"
+  ],
+  "author": "Eduardo Fortes / Igor Cronemberger",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/umeduardo/2via-atualizacao-boleto-itau/issues"
+  },
+  "homepage": "https://github.com/umeduardo/2via-atualizacao-boleto-itau#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "puppeteer": "^1.6.0",
+    "request": "^2.87.0"
+  }
+}
