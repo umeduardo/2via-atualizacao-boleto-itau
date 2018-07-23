@@ -9,7 +9,6 @@ var request = require('request');
 var fs = require('fs');
 var app = express();
 
-// respond with "hello world" when a GET request is made to the homepage
 app.get('/atualiza', async function(req, res) {
   if( req.query.b ){
 		const result = await pup1('atualizar',req.query.b);
